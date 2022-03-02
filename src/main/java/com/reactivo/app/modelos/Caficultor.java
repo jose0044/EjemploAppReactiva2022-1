@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.ArrayList;
+import java.util.Map;
 
 @Data
 @AllArgsConstructor
@@ -15,4 +16,5 @@ public class Caficultor {
     protected String nombreCompleto;
     protected String ciudadResidencia;
     protected ArrayList<Cafe> cafesProducidos;
+    protected Map<Integer, Saco> sacos;
 }

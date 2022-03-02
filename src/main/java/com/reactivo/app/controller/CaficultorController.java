@@ -3,6 +3,7 @@ package com.reactivo.app.controller;
 import com.reactivo.app.modelos.Cafe;
 import com.reactivo.app.modelos.Caficultor;
 import com.reactivo.app.modelos.Empaque;
+import com.reactivo.app.modelos.Saco;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -12,6 +13,10 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Random;
 
 @RestController
 @RequestMapping("/caficultor")
@@ -21,21 +26,26 @@ public class CaficultorController {
     @GetMapping("/{id}")
     public Mono<Caficultor> getCaficultorById(@PathVariable String id){
 
+        ArrayList<Cafe> cafes = cafesPredeterminados();
+        Map<Integer, Saco> sacos = this.sacosAsociados(cafes);
 
         Caficultor caficultorPrueba = new Caficultor("32456129", "Francisco Jimenez",
-                "Fredonia", cafesPredeterminados());
+                "Fredonia", cafes, sacos);
 
         return Mono.just(caficultorPrueba);
     }
 
     @GetMapping("/verCaficultores")
     public Flux<Caficultor> getCaficultores(){
+        ArrayList<Cafe> cafes = cafesPredeterminados();
+        Map<Integer, Saco> sacos = this.sacosAsociados(cafes);
+
         Caficultor caficultorPrueba = new Caficultor("32456129", "Francisco Jimenez",
-                "Fredonia", cafesPredeterminados());
+                "Fredonia", cafes, sacos);
         Caficultor caficultorPrueba2 = new Caficultor("8544689", "Yolanda Perez",
-                "Armenia", cafesPredeterminados());
+                "Armenia", cafes, sacos);
         Caficultor caficultorPrueba3 = new Caficultor("87456189", "Leopoldo Castro",
-                "Manizales", cafesPredeterminados());
+                "Manizales", cafes, sacos);
 
         return Flux.merge(Mono.just(caficultorPrueba), Mono.just(caficultorPrueba2), Mono.just(caficultorPrueba3));
     }
@@ -54,12 +64,36 @@ public class CaficultorController {
         Cafe cafePrueba4 = new Cafe("CF-04", "Borbon", 1850, "Andina",
                 11f, 29.9f, empaquePrueba2);
 
-        ArrayList cafes = new ArrayList();
+        ArrayList<Cafe> cafes = new ArrayList<>();
         cafes.add(cafePrueba);
         cafes.add(cafePrueba2);
         cafes.add(cafePrueba3);
         cafes.add(cafePrueba4);
 
         return cafes;
+    }
+
+    private Map<Integer, Saco> sacosAsociados(List<Cafe> cafes) {
+        Map<Integer, Saco> sacos = new HashMap<>();
+        List<String> materiales = new ArrayList<>();
+        materiales.add("Plastico");
+        materiales.add("Carton");
+        materiales.add("Papel");
+        materiales.add("Tela");
+
+        Random rnd = new Random();
+
+        for (int i = 0; i < 15; i++) {
+            sacos.put(i,
+                    new Saco(
+                            i,
+                            cafes.get(rnd.nextInt(4 - 1) + 1),
+                            rnd.nextFloat(),
+                            materiales.get(rnd.nextInt(4 - 1) + 1),
+                            "2022-03-02")
+            );
+        }
+
+        return sacos;
     }
 }
