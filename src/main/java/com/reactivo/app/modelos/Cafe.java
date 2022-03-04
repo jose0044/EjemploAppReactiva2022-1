@@ -17,12 +17,4 @@ public class Cafe {
     protected Float costoImportacion;
     protected Float precio;
     protected Empaque empaque;
-
-    public String obtenerCostoTotalCafe(){
-        return "El costo total de este cafe es "
-                + this.costoImportacion
-                + this.precio
-                + this.empaque.getCosto()
-                + (this.empaque.getPeso() * (this.empaque.getCosto()/100));
-    }
 }

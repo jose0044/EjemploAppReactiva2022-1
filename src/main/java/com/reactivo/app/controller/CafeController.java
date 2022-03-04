@@ -1,8 +1,8 @@
 package com.reactivo.app.controller;
 
-import com.reactivo.app.data.CafeRepository;
 import com.reactivo.app.modelos.Cafe;
 import com.reactivo.app.modelos.Empaque;
+import com.reactivo.app.usecase.CafeUseCase;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -11,13 +11,14 @@ import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-//TODO: Agregar logica para soportar casos de uso y usar Bases de Datos
+//TODO: Agregar logica para usar Bases de Datos
 @RestController
 @RequestMapping("/cafe")
 @AllArgsConstructor
 public class CafeController {
 
     //private final CafeRepository cafeRepository
+    private final CafeUseCase cafeUseCase;
 
     //Usaremos Mono para procesar de forma reactiva, un solo objeto
     @GetMapping("/{id}")
@@ -52,10 +53,10 @@ public class CafeController {
         Cafe cafePrueba2 = new Cafe(idCafePrueba2, "Castillo", 1400, "Andina",
                 5f, 18.5f, empaquePrueba);
         if(idCafePrueba.equalsIgnoreCase(id)){
-            return Mono.just(cafePrueba.obtenerCostoTotalCafe());
+            return Mono.just(cafeUseCase.obtenerCostoTotalCafeCadena(cafePrueba));
         }
         if(idCafePrueba2.equalsIgnoreCase(id)){
-            return Mono.just(cafePrueba2.obtenerCostoTotalCafe());
+            return Mono.just(cafeUseCase.obtenerCostoTotalCafeCadena(cafePrueba2));
         }
         return Mono.just("No existe el cafe con el serial solicitado");
     }
