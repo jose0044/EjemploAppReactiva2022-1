@@ -10,29 +10,27 @@ import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-//TODO: Agregar logica para usar Bases de Datos
 @RestController
 @RequestMapping("/cafe")
 @AllArgsConstructor
 public class CafeController {
 
-    //private final CafeRepository cafeRepository
     private final CafeUseCase cafeUseCase;
 
     //Usaremos Mono para procesar de forma reactiva, un solo objeto
     @GetMapping("/{id}")
     public Mono<Cafe> getCafeById(@PathVariable String id){
-        return cafeUseCase.getById(id);
+        return cafeUseCase.getCafeBySerialMono(id);
     }
 
     @GetMapping("/costoCafe/{id}")
     public Mono<String> getCostoCafeById(@PathVariable String id){
-        return cafeUseCase.getCostoCafeById(id);
+        return cafeUseCase.getCostoCafeBySerialMono(id);
     }
 
     //Usaremos Flux para procesar de forma reactiva, uno o mas objetos
     @GetMapping("/verCafes")
-    public Flux<Cafe> getCafes() {
+    public Flux<Cafe> getCafes(){
         return cafeUseCase.getCafes();
     }
 }
