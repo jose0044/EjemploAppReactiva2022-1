@@ -29,17 +29,17 @@ public class CafeUseCase {
     }
 
     private String obtenerCadenaCostoTotalCafe(Mono<Cafe> cafeParam) {
-        Cafe cafe = cafeParam.block();
-        if(cafe == null){
-            return "El cafe no existe";
+        if(cafeParam != null){
+            Cafe cafe = cafeParam.block();
+            if (cafe.getEmpaque() == null) {
+                return "El cafe no tiene empaque";
+            }
+            return "El costo total de este cafe es "
+                    + cafe.getCostoImportacion()
+                    + cafe.getPrecio()
+                    + cafe.getEmpaque().getCosto()
+                    + (cafe.getEmpaque().getPeso() * (cafe.getEmpaque().getCosto() / 100));
         }
-        if(cafe.getEmpaque() == null){
-            return "El cafe no tiene empaque";
-        }
-        return "El costo total de este cafe es "
-                + cafe.getCostoImportacion()
-                + cafe.getPrecio()
-                + cafe.getEmpaque().getCosto()
-                + (cafe.getEmpaque().getPeso() * (cafe.getEmpaque().getCosto()/100));
+        return "El cafe no existe";
     }
 }
