@@ -15,22 +15,23 @@ import reactor.core.publisher.Mono;
 @AllArgsConstructor
 public class CafeController {
 
+    //private final CafeRepository cafeRepository
     private final CafeUseCase cafeUseCase;
 
     //Usaremos Mono para procesar de forma reactiva, un solo objeto
     @GetMapping("/{id}")
     public Mono<Cafe> getCafeById(@PathVariable String id){
-        return cafeUseCase.getCafeBySerialMono(id);
+        return Mono.just(cafeUseCase.obtenerCafeId(id));
     }
 
     @GetMapping("/costoCafe/{id}")
     public Mono<String> getCostoCafeById(@PathVariable String id){
-        return cafeUseCase.getCostoCafeBySerialMono(id);
+        return cafeUseCase.obtenerCostoCafeById(id);
     }
 
     //Usaremos Flux para procesar de forma reactiva, uno o mas objetos
     @GetMapping("/verCafes")
     public Flux<Cafe> getCafes(){
-        return cafeUseCase.getCafes();
+        return cafeUseCase.obtenerCafes();
     }
 }
