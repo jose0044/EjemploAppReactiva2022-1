@@ -29,15 +29,15 @@ class CafeControllerTest {
 
         /*Se agrega el Mockito.when para asegurar que cafeUseCase
         retorne un Cafe cuando se llama un getCafeById, y con el mismo ID siempre (el mismo serial)*/
-        String seriaCafePrueba = "00A3";
+        String serialCafePrueba = "00A3";
 
-        Cafe cafePrueba = new Cafe(seriaCafePrueba,"prueba",1200, "region prueba",
+        Cafe cafePrueba = new Cafe(serialCafePrueba,"prueba",1200, "region prueba",
                 10f, 10f, new Empaque());
 
-        Mockito.when(cafeUseCase.getCafeBySerialMono(seriaCafePrueba)).thenReturn(Mono.just(cafePrueba));
+        Mockito.when(cafeUseCase.getCafeBySerialMono(serialCafePrueba)).thenReturn(Mono.just(cafePrueba));
 
         webTestClient.get()
-                .uri("/cafe/"+seriaCafePrueba)
+                .uri("/cafe/"+serialCafePrueba)
                 .header(HttpHeaders.ACCEPT, "application/json")
                 .exchange()
                 .expectStatus().isOk()
@@ -45,8 +45,8 @@ class CafeControllerTest {
 
 
         /*Se agrega el Mockito.verify para validar que desde cafeUseCase
-        se llamo el metodo getCafeById una vez:*/
-        Mockito.verify(cafeUseCase, Mockito.times(1)).getCafeBySerialMono(seriaCafePrueba);
+        se llamo el metodo getCafeBySerialMono una vez:*/
+        Mockito.verify(cafeUseCase, Mockito.times(1)).getCafeBySerialMono(serialCafePrueba);
 
     }
 }
